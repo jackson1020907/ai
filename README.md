@@ -1,7 +1,7 @@
 <h3>2. 完整 Python 程式碼 (app.py)</h3>
 <p>請在你的電腦裡建立一個名為 <code>app.py</code> 的檔案，並將以下程式碼完整複製貼入：</p>
 
-<pre style="background-color: #f4f4f4; border: 1px solid #ddd; border-left: 3px solid #f36d33; color: #333; page-break-inside: avoid; font-family: monospace; font-size: 15px; line-height: 1.6; margin-bottom: 1.6em; max-width: 100%; overflow: auto; padding: 1em 1.5em; display: block; word-wrap: break-word; white-space: pre;">
+<pre class="notranslate" style="background-color: #f4f4f4; border: 1px solid #ddd; border-left: 3px solid #f36d33; color: #333; page-break-inside: avoid; font-family: monospace; font-size: 15px; line-height: 1.6; margin-bottom: 1.6em; max-width: 100%; overflow: auto; padding: 1em 1.5em; display: block; word-wrap: break-word; white-space: pre;">
 import streamlit as st
 import tempfile
 import os
@@ -25,7 +25,7 @@ if api_key:
     你是一位擁有10年執教經驗的專業羽球總教練。
     請分析使用者提供的比賽心得、數據檔案或影片，並從以下三個方面給予結構化的賽後檢討：
     1. 【技術面分析】：擊球點、球路質量、動作問題（如果有影片）。
-    2. 【戰術面分析】：多拍來回時的策略、防守或跑位盲點。
+    2. 【戰術面分析】：多拍來回時的策略、防守或跑位盲點.
     3. 【下週練習計畫】：提供 2 個具體、可執行的自主訓練菜單。
     
     語氣請保持專業、嚴謹但充滿鼓勵。
