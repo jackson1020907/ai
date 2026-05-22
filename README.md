@@ -1,3 +1,7 @@
+<h3>2. 完整 Python 程式碼 (app.py)</h3>
+<p>請在你的電腦裡建立一個名為 <code>app.py</code> 的檔案，並將以下程式碼完整複製貼入：</p>
+
+<pre style="background-color: #f4f4f4; border: 1px solid #ddd; border-left: 3px solid #f36d33; color: #333; page-break-inside: avoid; font-family: monospace; font-size: 15px; line-height: 1.6; margin-bottom: 1.6em; max-width: 100%; overflow: auto; padding: 1em 1.5em; display: block; word-wrap: break-word; white-space: pre;">
 import streamlit as st
 import tempfile
 import os
@@ -49,19 +53,15 @@ if api_key:
                 
                 # 如果是影片檔案，使用專用的連線傳輸（File API）
                 if uploaded_file.type == "video/mp4":
-                    # 將 Streamlit 的快取檔案存入電腦的臨時資料夾中
                     with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp_file:
                         tmp_file.write(uploaded_file.read())
                         tmp_path = tmp_file.name
 
-                    # 呼叫 client.files.upload 上傳大型影片
                     uploaded_video_file = client.files.upload(file=tmp_path)
                     contents.append(uploaded_video_file)
-                    
-                    # 刪除電腦中的臨時檔案，保持乾淨
                     os.unlink(tmp_path)
                 
-                # 如果是純文字或 CSV 檔案，則維持原來的 Part 處理方式
+                # 如果是純文字或 CSV 檔案
                 else:
                     file_bytes = uploaded_file.read()
                     mime_type = uploaded_file.type
@@ -94,3 +94,4 @@ if api_key:
                     st.error(f"發生錯誤：{e}")
 else:
     st.info("請先在左側邊欄輸入你的 Gemini API Key 以啟動 AI 教練。")
+</pre>
