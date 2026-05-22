@@ -1,13 +1,6 @@
-2. **取得 API Key**：去 Google AI Studio 申請一組免費的 **Gemini API Key**。
-
----
-
-### 2. 完整 Python 程式碼 (app.py)
-
-請將以下程式碼存成一個叫做 app.py 的檔案：
-
-```python
 import streamlit as st
+import tempfile
+import os
 from google import genai
 from google.genai import types
 
@@ -52,29 +45,44 @@ if api_key:
 
         # 處理上傳的檔案/影片
         if uploaded_file is not None:
-            with st.spinner("正在處理上傳的檔案..."):
-                file_bytes = uploaded_file.read()
-                mime_type = uploaded_file.type
+            with st.spinner("正在將檔案安全地提供給 AI 教練..."):
                 
-                # 將檔案包裝成 Gemini 接受的 Part 格式
-                file_part = types.Part.from_bytes(
-                    data=file_bytes,
-                    mime_type=mime_type,
-                )
-                contents.append(file_part)
+                # 如果是影片檔案，使用專用的連線傳輸（File API）
+                if uploaded_file.type == "video/mp4":
+                    # 將 Streamlit 的快取檔案存入電腦的臨時資料夾中
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp_file:
+                        tmp_file.write(uploaded_file.read())
+                        tmp_path = tmp_file.name
+
+                    # 呼叫 client.files.upload 上傳大型影片
+                    uploaded_video_file = client.files.upload(file=tmp_path)
+                    contents.append(uploaded_video_file)
+                    
+                    # 刪除電腦中的臨時檔案，保持乾淨
+                    os.unlink(tmp_path)
+                
+                # 如果是純文字或 CSV 檔案，則維持原來的 Part 處理方式
+                else:
+                    file_bytes = uploaded_file.read()
+                    mime_type = uploaded_file.type
+                    file_part = types.Part.from_bytes(
+                        data=file_bytes,
+                        mime_type=mime_type,
+                    )
+                    contents.append(file_part)
 
         if not contents:
             st.warning("請至少輸入心得或上傳一個檔案喔！")
         else:
-            with st.spinner("AI 教練正在看影片和思考分析中，請稍候..."):
+            with st.spinner("AI 教練正在看影片和思考分析中，請稍候... (影片較大時需要稍等一下下)"):
                 try:
-                    # 呼叫 Gemini 2.5 Flash 模型（支援強大的影片與文字多模態分析）
+                    # 呼叫 Gemini 2.5 Flash 模型
                     response = client.models.generate_content(
                         model='gemini-2.5-flash',
                         contents=contents,
                         config=types.GenerateContentConfig(
                             system_instruction=system_instruction,
-                            temperature=0.4, # 讓回答稍微嚴謹聚焦一點
+                            temperature=0.4,
                         )
                     )
                     
